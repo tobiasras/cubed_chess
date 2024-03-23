@@ -24,24 +24,21 @@ controls.mouseButtons = {
 controls.enablePan = false;
 controls.maxDistance = 25;
 
-
-const chessboard = createBoard()
-scene.add(chessboard[1])
-
-
-const gameBoard = chessboard[0]
-
+const gameBoard = createBoard(scene)
 
 const mouse = new THREE.Vector2();
-const rayCaster = new THREE.Raycaster()
+const rayCaster = new THREE.Raycaster();
+
 document.onmousemove = (event => {
     mouse.x = event.x
     mouse.y = event.y
 })
+
 document.onmousedown = (event) => {
     // left = 0, middle = 1, right = 3
     if (event.button !== 0)
         return
+
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -49,10 +46,14 @@ document.onmousedown = (event) => {
 
     const intersects = rayCaster.intersectObject(scene)
 
+    console.log(intersects)
+
     if (intersects.length === 0)
         return;
 
+    // takes first object ray intersects with
     const object = intersects[0].object
+
     document.getElementById("lastTile").innerText = object.name
 
 }
@@ -62,6 +63,8 @@ function animate() {
     controls.update();
     renderer.render(scene, camera);
 }
+
+
 
 animate();
 

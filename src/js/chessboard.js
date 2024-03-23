@@ -2,9 +2,9 @@ import * as THREE from "three";
 
 const segmentSize = 3 / 8; // Assuming the chessboard size is 3 and it has 8 segments per side
 
-export function createBoard() {
+export function createBoard(scene) {
+
     const gameBoard = []
-    const boardModel = new THREE.Group()
 
     for (let side = 0; side < 6; side++) {
         let boardFace = []
@@ -13,11 +13,13 @@ export function createBoard() {
             const row = []
 
             for (let j = 0; j < 8; j++) {
-                createTile(side, i, j, boardModel);
+                let tile = createTile(side, i, j);
+                tile.name = `${side + 1}_${i + 1}_${j + 1}`
+                scene.add(tile)
 
                 row.push({
                     isBoardTile: true,
-                    name: `${side + 1}_${i + 1}_${j + 1}`,
+                    name: tile.name,
                     piece: ""
                 })
             }
@@ -31,10 +33,10 @@ export function createBoard() {
         gameBoard.push(boardFace)
     }
 
-    return [gameBoard, boardModel]
+    return gameBoard;
 }
 
-function createTile(side, i, j, boardModel) {
+function createTile(side, i, j) {
     // 3d model
     const segmentMaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide});
     const planeGeometry = new THREE.PlaneGeometry(segmentSize, segmentSize);
@@ -43,7 +45,7 @@ function createTile(side, i, j, boardModel) {
     transformTile[side](tile, i, j, )
     colorTile[side](tile, (j + i) % 2 === 0)
 
-    boardModel.add(tile)
+    return tile;
 }
 
 const colorTile = [
@@ -119,8 +121,6 @@ const transformTile = [
         );
     },
 ]
-
-
 
 // Creating gameboard
 let rowFlaps = [
