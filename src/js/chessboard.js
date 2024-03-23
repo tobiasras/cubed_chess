@@ -13,9 +13,16 @@ export function createBoard(scene) {
             const row = []
 
             for (let j = 0; j < 8; j++) {
-                let tile = createTile(side, i, j);
+
+                const val = createTile(side, i, j)
+
+                let tile = val[0];
                 tile.name = `${side + 1}_${i + 1}_${j + 1}`
                 scene.add(tile)
+
+                let pieceContainer = val[1]
+                pieceContainer.name = `$:${side + 1}_${i + 1}_${j + 1}`
+                scene.add(pieceContainer)
 
                 row.push({
                     isBoardTile: true,
@@ -38,14 +45,25 @@ export function createBoard(scene) {
 
 function createTile(side, i, j) {
     // 3d model
+    const pieceContainerMaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide});
+
     const segmentMaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide});
     const planeGeometry = new THREE.PlaneGeometry(segmentSize, segmentSize);
-    const tile = new THREE.Mesh(planeGeometry, segmentMaterial);
+
+    const tile = new THREE.Mesh(planeGeometry);
+    tile.material = segmentMaterial
+
+    const pieceContainer = new THREE.Mesh(planeGeometry);
+    pieceContainer.material = pieceContainerMaterial
+    transformTile[side](pieceContainer, i, j)
+
+
 
     transformTile[side](tile, i, j, )
+
     colorTile[side](tile, (j + i) % 2 === 0)
 
-    return tile;
+    return [tile, pieceContainer];
 }
 
 const colorTile = [
