@@ -91,17 +91,176 @@ const transformTile = [
 ]
 
 
+let sideFlaps = [
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `2_${i+1}_8`,
+                    sideColor: "green"
+                })
+            }
+            tiles.push({})
+            isFirst = false
+            return tiles
+        } else {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `5_${i+1}_8`,
+                    sideColor: "purple"
+                })
+            }
+            tiles.push({})
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `4_8_${i+1}`,
+                    sideColor: "red"
+                })
+            }
+            tiles.push({})
+            return tiles
+        } else {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `3_8_${i+1}`,
+                    sideColor: "blue"
+                })
+            }
+            tiles.push({})
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `5_8_${i+1}`,
+                    sideColor: "purple"
+                })
+            }
+            tiles.push({})
+            return tiles
+        } else {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `2_8_${i+1}`,
+                    sideColor: "green"
+                })
+            }
+            tiles.push({})
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `5_1_${i+1}`,
+                    sideColor: "purple"
+                })
+            }
+            tiles.push({})
+            return tiles
+        } else {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `2_1_${i+1}`,
+                    sideColor: "green"
+                })
+            }
+            tiles.push({})
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `4_1_${i+1}`,
+                    sideColor: "red"
+                })
+            }
+            tiles.push({})
+            return tiles
+        } else {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `3_1_${i+1}`,
+                    sideColor: "blue"
+                })
+            }
+            tiles.push({})
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `5_1_${i+1}`,
+                    sideColor: "purple"
+                })
+            }
+            tiles.push({})
+            return tiles
+        } else {
+            let tiles = [{}]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `2_${i+1}_1`,
+                    sideColor: "green"
+                })
+            }
+            tiles.push({})
+            return tiles
+        }
+    }
+]
+
+
 for (let side = 0; side < 6; side++) {
 
     let boardFace = []
-    boardFace.push([-1, 0, 0, 0, 0, 0, 0, 0, 0, -1])
+
+    let faceColor = ["Orange", "Green", "Blue", "Red", "Purple", "Turquoise"]
+    console.log("Current side: ", faceColor[side])
+
+    boardFace.push(sideFlaps[side](true))
+
     for (let i = 0; i < 8; i++) {
         const row = []
         row.push(0)
 
         for (let j = 0; j < 8; j++) {
 
-            // Create a new material for each tile segment
             const segmentMaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide});
             const planeGeometry = new THREE.PlaneGeometry(segmentSize, segmentSize);
             const tile = new THREE.Mesh(planeGeometry, segmentMaterial);
@@ -111,7 +270,7 @@ for (let side = 0; side < 6; side++) {
             tile.name = `${side + 1}_${i + 1}_${j + 1}`
 
             const gameTile = {
-                isGameTile: true,
+                isBoardTile: true,
                 name: tile.name,
                 piece: ""
             }
@@ -126,8 +285,7 @@ for (let side = 0; side < 6; side++) {
         boardFace.push(row)
     }
 
-    boardFace.push([-1, 0, 0, 0, 0, 0, 0, 0, 0, -1])
-
+    boardFace.push(sideFlaps[side](false))
 
     console.log(boardFace)
 
@@ -163,7 +321,9 @@ document.onmousedown = (event) => {
     const intersects = rayCaster.intersectObject(scene)
 
     const object = intersects[0].object
-    console.log(object.name)
+
+    document.getElementById("lastTile").innerText = object.name
+
 }
 
 function updateTextInfo() {
