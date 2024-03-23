@@ -1,58 +1,350 @@
 import * as THREE from "three";
 
-const textureLoader = new THREE.TextureLoader();
+const segmentSize = 3 / 8; // Assuming the chessboard size is 3 and it has 8 segments per side
 
-const sideXPlus = textureLoader.load('./assets/side_a.png')
-sideXPlus.generateMipmaps = false;
-const sideXMinus = textureLoader.load('./assets/side_b.png')
-sideXMinus.generateMipmaps = false;
-const sideYPlus = textureLoader.load('./assets/side_c.png')
-sideYPlus.generateMipmaps = false;
-const sideYMinus = textureLoader.load('./assets/side_d.png')
-sideYMinus.generateMipmaps = false;
-const sideZPlus = textureLoader.load('./assets/side_e.png')
-sideZPlus.generateMipmaps = false;
-const sideZMinus = textureLoader.load('./assets/side_f.png')
-sideZMinus.generateMipmaps = false;
+export function createBoard() {
+    const gameBoard = []
+    const boardModel = new THREE.Group()
 
-sideXPlus.magFilter = THREE.NearestFilter;
-sideXMinus.magFilter = THREE.NearestFilter
-sideYPlus.magFilter = THREE.NearestFilter;
-sideYMinus.magFilter = THREE.NearestFilter;
-sideZPlus.magFilter = THREE.NearestFilter;
-sideZMinus.magFilter = THREE.NearestFilter;
+    for (let side = 0; side < 6; side++) {
+        let boardFace = []
 
+        for (let i = 0; i < 8; i++) {
+            const row = []
 
-const boardTexture = [
-    new THREE.MeshBasicMaterial({
-        map: sideXPlus, //
-    }),
-    new THREE.MeshBasicMaterial({
-        map: sideXMinus, // X -
-    }),
-    new THREE.MeshBasicMaterial({
-        map: sideYPlus, // Y +
-    }),
-    new THREE.MeshBasicMaterial({
-        map: sideYMinus, // Y -
-    }),
-    new THREE.MeshBasicMaterial({
-        map: sideZPlus, // Z +
-    }),
-    new THREE.MeshBasicMaterial({
-        map: sideZMinus, // Z -
-    }),
+            for (let j = 0; j < 8; j++) {
+                createTile(side, i, j, boardModel);
+
+                row.push({
+                    isBoardTile: true,
+                    name: `${side + 1}_${i + 1}_${j + 1}`,
+                    piece: ""
+                })
+            }
+            boardFace.push(row)
+        }
+
+        // creates the flaps for the board
+        boardFace.unshift(rowFlaps[side](true))
+        boardFace.push(rowFlaps[side](false))
+        sideFlaps[side](boardFace);
+        gameBoard.push(boardFace)
+    }
+
+    return [gameBoard, boardModel]
+}
+
+function createTile(side, i, j, boardModel) {
+    // 3d model
+    const segmentMaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide});
+    const planeGeometry = new THREE.PlaneGeometry(segmentSize, segmentSize);
+    const tile = new THREE.Mesh(planeGeometry, segmentMaterial);
+
+    transformTile[side](tile, i, j, )
+    colorTile[side](tile, (j + i) % 2 === 0)
+
+    boardModel.add(tile)
+}
+
+const colorTile = [
+    (tile, isEven) => {
+        tile.material.color.set(isEven ? "#ffa22e" : "#fff7d2")
+    },
+    (tile, isEven) => {
+        tile.material.color.set(isEven ? "#2bff1b" : "#deffcb")
+    },
+    (tile, isEven) => {
+        tile.material.color.set(isEven ? "#0065ff" : "#80b8ff")
+    },
+    (tile, isEven) => {
+        tile.material.color.set(isEven ? "#ff4545" : "#ffadc0")
+    },
+    (tile, isEven) => {
+        tile.material.color.set(isEven ? "#be59ff" : "#e176ff")
+    },
+    (tile, isEven) => {
+        tile.material.color.set(isEven ? "#2efff5" : "#d9fff2")
+    },
 ]
 
-const material =  boardTexture
-const chessboard = new THREE.Mesh( new THREE.BoxGeometry( 3, 3, 3 , 8, 8, 8));
-chessboard.material = material
+const transformTile = [
+    (tile, i, j, isEven) => {
+        tile.rotation.x = 0;
+        tile.position.set(
+            (j - 4) * segmentSize + segmentSize / 2,
+            (i - 4) * segmentSize + segmentSize / 2,
+            1.5,
+        );
+    },
+    (tile, i, j, isEven) => {
+        tile.rotation.z = -Math.PI / 2;
+        tile.rotation.x = Math.PI / 2;
+        tile.position.set(
+            (i - 4) * segmentSize + segmentSize / 2,
+            1.5,
+            (j - 4) * segmentSize + segmentSize / 2
+        );
+    },
+    (tile, i, j, isEven) => {
+        tile.rotation.y = Math.PI / 2;
+        tile.position.set(
+            1.5,
+            (i - 4) * segmentSize + segmentSize / 2,
+            (j - 4) * segmentSize + segmentSize / 2
+        );
+    },
+    (tile, i, j, isEven) => {
+        tile.rotation.y = Math.PI / 2;
+        tile.position.set(
+            -1.5,
+            (i - 4) * segmentSize + segmentSize / 2,
+            (j - 4) * segmentSize + segmentSize / 2
+        );
+    },
+    (tile, i, j, isEven) => {
+        tile.rotation.z = Math.PI / 2;
+        tile.rotation.x = -Math.PI / 2;
+        tile.position.set(
+            (i - 4) * segmentSize + segmentSize / 2,
+            -1.5,
+            (j - 4) * segmentSize + segmentSize / 2
+        );
+    },
+    (tile, i, j, isEven) => {
+        tile.rotation.x = 0;
+        tile.position.set(
+            (j - 4) * segmentSize + segmentSize / 2,
+            (i - 4) * segmentSize + segmentSize / 2,
+            -1.5,
+        );
+    },
+]
 
 
-export default chessboard;
 
+// Creating gameboard
+let rowFlaps = [
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `5_${i + 1}_8`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        } else {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `2_${i + 1}_8`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `4_8_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        } else {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `3_8_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `5_8_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        } else {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `2_8_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `5_1_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        } else {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `2_1_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `4_1_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        } else {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `3_1_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        }
+    },
+    (isFirst) => {
+        if (isFirst) {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `5_1_${i + 1}`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        } else {
+            let tiles = [0]
+            for (let i = 0; i < 8; i++) {
+                tiles.push({
+                    isBoardTile: false,
+                    tile: `2_${i + 1}_1`,
+                })
+            }
+            tiles.push(0)
+            return tiles
+        }
+    }
+]
 
+let sideFlaps = [
+    (boardFace) => {
+        // Orange side
+        for (let i = 1; i < 9; i++) {
+            boardFace[i].unshift({
+                isBoardTile: false,
+                tile: `4_${i}_8`,
+            })
 
+            boardFace[i].push({
+                isBoardTile: false,
+                tile: `3_${i}_8`,
+            })
+        }
+    },
+    (boardFace) => {
+        // Green side
+        for (let i = 1; i < 9; i++) {
+            boardFace[i].unshift({
+                isBoardTile: false,
+                tile: `6_8_${i}`,
+            })
+            boardFace[i].push({
+                isBoardTile: false,
+                tile: `1_${i}_8`,
+            })
+        }
+    },
+    (boardFace) => {
+        // Blue side
+        for (let i = 1; i < 9; i++) {
+            boardFace[i].unshift({
+                isBoardTile: false,
+                tile: `6_${i}_8`,
+            })
+            boardFace[i].push({
+                isBoardTile: false,
+                tile: `1_${i}_8`,
+            })
+        }
+    },
+    (boardFace) => {
+        // Red side
+        for (let i = 1; i < 9; i++) {
+            boardFace[i].unshift({
+                isBoardTile: false,
+                tile: `6_${i}_1`,
+            })
+            boardFace[i].push({
+                isBoardTile: false,
+                tile: `1_${i}_1`,
+            })
+        }
+    },
+    (boardFace) => {
+        // Purple
+        for (let i = 1; i < 9; i++) {
+            boardFace[i].unshift({
+                isBoardTile: false,
+                tile: `6_1_${i}`,
+            })
+            boardFace[i].push({
+                isBoardTile: false,
+                tile: `1_1_${i}`,
+            })
+        }
+    },
+    (boardFace) => {
+        // Turquoise
+        for (let i = 1; i < 9; i++) {
+            boardFace[i].unshift({
+                isBoardTile: false,
+                tile: `4_${i}_1`,
+            })
+            boardFace[i].push({
+                isBoardTile: false,
+                tile: `3_${i}_1`,
+            })
+        }
+    },
+]
 
 
 
