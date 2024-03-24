@@ -26,8 +26,9 @@ export function createBoard(scene) {
 
                 row.push({
                     isBoardTile: true,
-                    name: tile.name,
-                    piece: ""
+                    tile: tile.name,
+                    hasPiece: false,
+                    piece: {},
                 })
             }
             boardFace.push(row)
@@ -56,8 +57,6 @@ function createTile(side, i, j) {
     const pieceContainer = new THREE.Mesh(planeGeometry);
     pieceContainer.material = pieceContainerMaterial
     transformTile[side](pieceContainer, i, j)
-
-
 
     transformTile[side](tile, i, j, )
 
@@ -306,7 +305,7 @@ let sideFlaps = [
             })
             boardFace[i].push({
                 isBoardTile: false,
-                tile: `1_${i}_8`,
+                tile: `1_8_${i}`,
             })
         }
     },
