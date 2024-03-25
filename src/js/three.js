@@ -265,16 +265,58 @@ function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack) {
     crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack)
 }
 
-function crawlKnight(possibleTiles, pos, direction, pieceColor,  canAttack) {
-    const side = pos[0] - 1 // sides are from 1, 2, 3, 4, 5. -1 for
-    const xPos = pos[1] + direction[0]
-    const yPos = pos[2] + direction[1]
 
-    const nextPos = side.tile.split("_").map(val => +val)
+function nextTile(position, direction) {
+    const side = position[0] - 1 // sides are from 1, 2, 3, 4, 5. -1 for
+    const xPos = position[1] + direction[0]
+    const yPos = position[2] + direction[1]
+    return gameBoard[side][xPos][yPos]
+}
 
-    let nextGameTile = gameBoard[side][xPos][yPos]
 
-    transformDirection(direction, nextPos, pos);
+function crawlKnight(possibleTiles, pos, direction, pieceColor, canAttack) {
+    // one tile
+    let next = nextTile(pos, direction);
+    let nextPos = next.tile.split("_").map(val => +val)
+
+    if (!next.isBoardTile) {
+        transformDirection(direction, nextPos, pos);
+    }
+
+    next = nextTile(nextPos, direction)
+    nextPos = next.tile.split("_").map(val => +val)
+
+    if (!next.isBoardTile) {
+        transformDirection(direction, nextPos, pos);
+    }
+
+    console.log("base", next)
+
+    direction.reverse()
+    let sides = direction.map(val => val * -1)
+
+
+    for (let i = 0; i < 2; i++) {
+        sides = sides.map(val => val * -1)
+        let next = nextTile(nextPos, sides);
+        if (!next.isBoardTile) {
+            next = getGameBoardTileFromTile(next.tile)
+        }
+
+        if (next.hasPiece) {
+            if (next.piece.type[0] !== pieceColor && canAttack) {
+                // color not the same and can attack
+                possibleTiles.add(next)
+            } else {
+
+            }
+        } else {
+            possibleTiles.add(next)
+        }
+
+    }
+
+
 }
 
 
@@ -299,6 +341,7 @@ const typeMoves = {
 
         let possibleTiles = new Set();
 
+
         let pieceColor = gameBoardTile.piece.type[0]
 
         crawlStraight(possibleTiles, pos, [1, 1], pieceColor, true)
@@ -310,11 +353,15 @@ const typeMoves = {
     },
     "knight": (gameBoard, gameBoardTile) => {
         let possibleTiles = new Set();
+
+        let pieceColor = gameBoardTile.piece.type[0]
+
         const pos = gameBoardTile.tile.split("_").map(val => +val)
-        crawlKnight(possibleTiles, pos, [1, 0])
-        //crawlKnight(possibleTiles, pos, [-1, 0])
-        //crawlKnight(possibleTiles, pos, [0, 1])
-        //crawlKnight(possibleTiles, pos, [0, -1])
+        crawlKnight(possibleTiles, pos, [1, 0], pieceColor, true)
+        crawlKnight(possibleTiles, pos, [-1, 0], pieceColor, true)
+        crawlKnight(possibleTiles, pos, [0, 1], pieceColor, true)
+        crawlKnight(possibleTiles, pos, [0, -1], pieceColor, true)
+
 
         return possibleTiles
     },
@@ -407,9 +454,8 @@ function displayHighlight(tile) {
 
 setupPieces()
 
-movePiece("6_8_2", "1_4_8");
-
-showPossibleMoves("1_4_8") // queen tile
+movePiece("6_8_2", "1_3_4");
+showPossibleMoves("1_3_4") // queen tile
 
 console.log(gameBoard)
 
