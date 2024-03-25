@@ -169,142 +169,202 @@ function movePiece(fromTile, toTile) {
 }
 
 
-function getPosFromTile(gameBoardTile) {
+function transformDirection(direction, nextPos, pos) {
+    if (direction[0] === 0 || direction[1] === 0) {
+        if (nextPos[1] === 8 && direction[0] !== 0) {
+            direction[0] = -1
+        }
+        if (nextPos[1] === 1 && direction[0] !== 0) {
+            direction[0] = 1
+        }
+        if (nextPos[1] === 8 && direction[1] !== 0) {
+            direction[1] = -1
+        }
+        if (nextPos[1] === 1 && direction[1] !== 0) {
+            direction[1] = 1
+        }
 
+        if (nextPos[2] === 8 && direction[0] !== 0) {
+            direction[0] = -1
+        }
+        if (nextPos[2] === 1 && direction[0] !== 0) {
+            direction[0] = 1
+        }
+        if (nextPos[2] === 8 && direction[1] !== 0) {
+            direction[1] = -1
+        }
+        if (nextPos[2] === 1 && direction[1] !== 0) {
+            direction[1] = 1
+        }
+    }
 
+    if (pos[0] === 2 && nextPos[0] === 1) {
+        direction.reverse()
+    }
+    if (pos[0] === 2 && nextPos[0] === 6) {
+        direction.reverse()
+    }
+    if (pos[0] === 1 && nextPos[0] === 2) {
+        direction.reverse()
+    }
+    if (pos[0] === 6 && nextPos[0] === 2) {
+        direction.reverse()
+    }
+    if (pos[0] === 5 && nextPos[0] === 6) {
+        direction.reverse()
+    }
+    if (pos[0] === 6 && nextPos[0] === 5) {
+        direction.reverse()
+    }
 }
+
+function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack) {
+    const side = pos[0] - 1 // sides are from 1, 2, 3, 4, 5. -1 for
+    const xPos = pos[1] + direction[0]
+    const yPos = pos[2] + direction[1]
+
+    let nextGameTile = gameBoard[side][xPos][yPos]
+
+    // nextGameTile === 0, is a corner if true
+    if (nextGameTile === 0) {
+        return;
+    }
+
+    let checkForPieces = nextGameTile
+
+    if (!nextGameTile.isBoardTile) {
+        checkForPieces = getGameBoardTileFromTile(nextGameTile.tile)
+    }
+
+    const nextPos = checkForPieces.tile.split("_").map(val => +val)
+
+    // check for pieces
+    if (checkForPieces.hasPiece) {
+        if (checkForPieces.piece.type[0] !== pieceColor && canAttack) {
+            // color not the same and can attack
+            possibleTiles.add(checkForPieces)
+            return
+        } else {
+            // cannot move here cause same piece color
+            return
+        }
+    }
+
+    // no piece on tile
+    if (nextGameTile.isBoardTile) {
+        possibleTiles.add(nextGameTile)
+        crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack)
+        return
+    }
+
+    possibleTiles.add(checkForPieces)
+
+    // makes it possible to travel to diff. sides
+    transformDirection(direction, nextPos, pos);
+
+    crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack)
+}
+
+function crawlKnight(possibleTiles, pos, direction, pieceColor,  canAttack) {
+    const side = pos[0] - 1 // sides are from 1, 2, 3, 4, 5. -1 for
+    const xPos = pos[1] + direction[0]
+    const yPos = pos[2] + direction[1]
+
+    const nextPos = side.tile.split("_").map(val => +val)
+
+    let nextGameTile = gameBoard[side][xPos][yPos]
+
+    transformDirection(direction, nextPos, pos);
+}
+
 
 const typeMoves = {
     "cross": (gameBoard, gameBoardTile) => {
+        const pos = gameBoardTile.tile.split("_").map(val => +val)
+
+        let possibleTiles = new Set();
+
+        let pieceColor = gameBoardTile.piece.type[0]
+
+        crawlStraight(possibleTiles, pos, [0, 1], pieceColor, true)
+        crawlStraight(possibleTiles, pos, [0, -1], pieceColor, true)
+        crawlStraight(possibleTiles, pos, [1, 0], pieceColor, true)
+        crawlStraight(possibleTiles, pos, [-1, 0], pieceColor, true)
+
+        return possibleTiles
+    },
+    "diagonal": (gameBoard, gameBoardTile) => {
 
         const pos = gameBoardTile.tile.split("_").map(val => +val)
 
         let possibleTiles = new Set();
 
-        const crawl = (pos, direction, pieceColor, canAttack) => {
-            let nextGameTile = gameBoard[pos[0] - 1][pos[1] + direction[0]][pos[2] + direction[1]]
-            let checkForPieces = nextGameTile
+        let pieceColor = gameBoardTile.piece.type[0]
 
-            if (!nextGameTile.isBoardTile){
-                checkForPieces = getGameBoardTileFromTile(nextGameTile.tile)
-            }
+        crawlStraight(possibleTiles, pos, [1, 1], pieceColor, true)
+        crawlStraight(possibleTiles, pos, [1, -1], pieceColor, true)
+        crawlStraight(possibleTiles, pos, [-1, 1], pieceColor, true)
+        crawlStraight(possibleTiles, pos, [-1, -1], pieceColor, true)
 
-            const nextPos = checkForPieces.tile.split("_").map(val => +val)
-
-            // check for pieces
-            if (checkForPieces.hasPiece) {
-                if (checkForPieces.piece.type[0] !== pieceColor && canAttack) {
-                    // color not the same and can attack
-                    possibleTiles.add(checkForPieces)
-                    return
-                } else {
-                    // cannot move here cause same piece color
-                    return
-                }
-            }
-
-            // no piece on tile
-            if (nextGameTile.isBoardTile) {
-                possibleTiles.add(nextGameTile)
-                crawl(nextPos, direction, pieceColor, canAttack)
-                return
-            }
-
-            possibleTiles.add(checkForPieces)
-
-            if (nextPos[1] === 8 && direction[0] !== 0) {
-                direction[0] = -1
-            }
-            if (nextPos[1] === 1 && direction[0] !== 0) {
-                direction[0] = 1
-            }
-            if (nextPos[1] === 8 && direction[1] !== 0) {
-                direction[1] = -1
-            }
-            if (nextPos[1] === 1 && direction[1] !== 0) {
-                direction[1] = 1
-            }
-            if (nextPos[2] === 8 && direction[0] !== 0) {
-                direction[0] = -1
-            }
-            if (nextPos[2] === 1 && direction[0] !== 0) {
-                direction[0] = 1
-            }
-            if (nextPos[2] === 8 && direction[1] !== 0) {
-                direction[1] = -1
-            }
-            if (nextPos[2] === 1 && direction[1] !== 0) {
-                direction[1] = 1
-            }
-
-            if (pos[0] === 2 && nextPos[0] === 1) {
-                direction.reverse()
-            }
-            if (pos[0] === 2 && nextPos[0] === 6) {
-                direction.reverse()
-            }
-            if (pos[0] === 1 && nextPos[0] === 2) {
-                direction.reverse()
-            }
-            if (pos[0] === 6 && nextPos[0] === 2) {
-                direction.reverse()
-            }
-            if (pos[0] === 5 && nextPos[0] === 6) {
-                direction.reverse()
-            }
-            if (pos[0] === 6 && nextPos[0] === 5) {
-                direction.reverse()
-            }
-
-            crawl(nextPos, direction, pieceColor, canAttack)
-        }
-
-
-        crawl(pos, [0, 1], gameBoardTile.piece.type[0], true) // dir is up
-        crawl(pos, [0, -1], gameBoardTile.piece.type[0], true) // dir is up
-        crawl(pos, [1, 0], gameBoardTile.piece.type[0], true) // dir is up
-        crawl(pos, [-1, 0], gameBoardTile.piece.type[0], true) // dir is up
-
-        console.log("possibleTiles")
-        console.log([...possibleTiles])
+        return possibleTiles
     },
-    "diagonal": () => {
-        console.log("diagonal move run")
-    },
-    "horse": () => {
+    "knight": (gameBoard, gameBoardTile) => {
+        let possibleTiles = new Set();
+        const pos = gameBoardTile.tile.split("_").map(val => +val)
+        crawlKnight(possibleTiles, pos, [1, 0])
+        //crawlKnight(possibleTiles, pos, [-1, 0])
+        //crawlKnight(possibleTiles, pos, [0, 1])
+        //crawlKnight(possibleTiles, pos, [0, -1])
+
+        return possibleTiles
     },
     "single": () => {
+
+
     },
     "singeAttack": () => {
     },
 
     "doubleMove": () => {
 
+
     }
 
 }
 
 const pieceMoveInstructions = {
-    "b": [],
+    "b": [
+        typeMoves.diagonal
+    ],
     "k": "asd",
-    "n": "asd",
+    "n": [
+        typeMoves.knight
+    ],
     "p": "asd",
     "q": [
         typeMoves.cross,
         typeMoves.diagonal
     ],
-    "r": "asd",
+    "r": [
+        typeMoves.cross
+    ]
 }
 
 
 function showPossibleMoves(tile) {
-    let gameBoardTile = getGameBoardTileFromTile(tile)
-    let pieceTypeNoColor = gameBoardTile.piece.type[1].toLowerCase() // b, k, n, p, q, r
-    let moves = pieceMoveInstructions[pieceTypeNoColor]
+    const gameBoardTile = getGameBoardTileFromTile(tile)
+    const pieceTypeNoColor = gameBoardTile.piece.type[1].toLowerCase() // b, k, n, p, q, r
+    const moves = pieceMoveInstructions[pieceTypeNoColor]
 
-    let possibleMoves = []
+    let allPossibleMoves = new Set();
+    // move returns Sets.
     moves.forEach(move => {
-        move(gameBoard, gameBoardTile)
+        const possibleMoves = move(gameBoard, gameBoardTile)
+        allPossibleMoves = new Set([...allPossibleMoves, ...possibleMoves])
+    })
+
+    allPossibleMoves.forEach(value => {
+        displayHighlight(value.tile)
     })
 
 
@@ -347,9 +407,9 @@ function displayHighlight(tile) {
 
 setupPieces()
 
-movePiece("1_8_4", "2_4_4");
+movePiece("6_8_2", "1_4_8");
 
-showPossibleMoves("2_4_4") // queen tile
+showPossibleMoves("1_4_8") // queen tile
 
 console.log(gameBoard)
 
