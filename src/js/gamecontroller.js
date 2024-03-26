@@ -55,6 +55,7 @@ export function movePiece(fromTile, toTile) {
 
     to.piece = from.piece
     to.hasPiece = true
+    to.piece.moves += 1
 
     from.piece = {}
     from.hasPiece = false
@@ -64,11 +65,77 @@ export function movePiece(fromTile, toTile) {
 }
 
 export function setupPieces() {
+    createPiece('1_1_5', "wK", true)
     createPiece('1_1_7', "wN", true)
-    createPiece('1_1_5', "wR", true)
-    createPiece('1_1_2', "wB", true)
     createPiece('1_1_4', "wQ", true)
+    createPiece('1_1_2', "wN", true)
+    createPiece('1_1_1', "wR", true)
+    createPiece('1_1_8', "wR", true)
+    createPiece('1_1_3', "wB", true)
+    createPiece('1_1_6', "wB", true)
 
+    createPiece('1_2_5', "wP", true)
+    createPiece('1_2_7', "wP", true)
+    createPiece('1_2_4', "wP", true)
+    createPiece('1_2_2', "wP", true)
+    createPiece('1_2_1', "wP", true)
+    createPiece('1_2_8', "wP", true)
+    createPiece('1_2_3', "wP", true)
+    createPiece('1_2_6', "wP", true)
+
+    createPiece('1_8_5', "bK", false)
+    createPiece('1_8_7', "bN", false)
+    createPiece('1_8_4', "bQ", false)
+    createPiece('1_8_2', "bN", false)
+    createPiece('1_8_1', "bR", false)
+    createPiece('1_8_8', "bR", false)
+    createPiece('1_8_3', "bB", false)
+    createPiece('1_8_6', "bB", false)
+
+    createPiece('1_7_5', "bP", false)
+    createPiece('1_7_7', "bP", false)
+    createPiece('1_7_4', "bP", false)
+    createPiece('1_7_2', "bP", false)
+    createPiece('1_7_1', "bP", false)
+    createPiece('1_7_8', "bP", false)
+    createPiece('1_7_3', "bP", false)
+    createPiece('1_7_6', "bP", false)
+
+    createPiece('6_1_5', "wK", true)
+    createPiece('6_1_7', "wN", true)
+    createPiece('6_1_4', "wQ", true)
+    createPiece('6_1_2', "wN", true)
+    createPiece('6_1_1', "wR", true)
+    createPiece('6_1_8', "wR", true)
+    createPiece('6_1_3', "wB", true)
+    createPiece('6_1_6', "wB", true)
+
+    createPiece('6_2_5', "wP", true)
+    createPiece('6_2_7', "wP", true)
+    createPiece('6_2_4', "wP", true)
+    createPiece('6_2_2', "wP", true)
+    createPiece('6_2_1', "wP", true)
+    createPiece('6_2_8', "wP", true)
+    createPiece('6_2_3', "wP", true)
+    createPiece('6_2_6', "wP", true)
+
+    createPiece('6_8_5', "bK", false)
+    createPiece('6_8_7', "bN", false)
+    createPiece('6_8_4', "bQ", false)
+    createPiece('6_8_2', "bN", false)
+    createPiece('6_8_1', "bR", false)
+    createPiece('6_8_8', "bR", false)
+    createPiece('6_8_3', "bB", false)
+    createPiece('6_8_6', "bB", false)
+
+    createPiece('6_7_5', "bP", false)
+    createPiece('6_7_7', "bP", false)
+    createPiece('6_7_4', "bP", false)
+    createPiece('6_7_2', "bP", false)
+    createPiece('6_7_1', "bP", false)
+    createPiece('6_7_8', "bP", false)
+    createPiece('6_7_3', "bP", false)
+    createPiece('6_7_6', "bP", false)
 
 }
 
@@ -437,7 +504,12 @@ function transformDirection(direction, nextPos, pos) {
     transformDirectionStraight(direction, pos, nextPos);
 }
 
-function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack) {
+function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack, depth = 999) {
+    depth = depth - 1;
+    if (depth === 0)
+        return;
+
+
     const side = pos[0] - 1 // sides are from 1, 2, 3, 4, 5. -1 for
     const xPos = pos[1] + direction[0]
     const yPos = pos[2] + direction[1]
@@ -455,8 +527,6 @@ function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack) {
 
     const nextPos = checkForPieces.tile.split("_").map(val => +val)
 
-    console.log(nextPos)
-
     // check for pieces
     if (checkForPieces.hasPiece) {
         if (checkForPieces.piece.type[0] !== pieceColor && canAttack) {
@@ -472,20 +542,16 @@ function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack) {
 
     // no piece on tile
     if (nextGameTile.isBoardTile) {
-
         possibleTiles.add(nextGameTile)
-
-
-        crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack)
+        crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack, depth)
         return
     }
 
     possibleTiles.add(checkForPieces)
-
     // makes it possible to travel to diff. sides
     transformDirection(direction, nextPos, pos);
 
-    crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack)
+    crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack, depth)
 }
 
 function nextTile(position, direction) {
@@ -534,7 +600,7 @@ function crawlKnight(possibleTiles, pos, direction, pieceColor, canAttack) {
     }
 }
 
-function crawlSingle(possibleTiles, pos, direction, pieceColor, canAttack) {
+function crawlSingle(possibleTiles, pos, direction, pieceColor, canAttack, canMoveWithoutAttacking = true) {
     let next = nextTile(pos, direction);
 
     if (!next.isBoardTile) {
@@ -547,13 +613,15 @@ function crawlSingle(possibleTiles, pos, direction, pieceColor, canAttack) {
             possibleTiles.add(next)
         }
     } else {
-        possibleTiles.add(next)
+        if (canMoveWithoutAttacking) {
+            possibleTiles.add(next)
+        }
     }
 }
 
 function singleMove(gameBoardTile, canAttack) {
-    let possibleTiles = new Set();
 
+    let possibleTiles = new Set();
 
     let pieceColor = gameBoardTile.piece.type[0]
 
@@ -573,13 +641,28 @@ function singleMove(gameBoardTile, canAttack) {
     return possibleTiles
 }
 
+
+function diagonalSingleAttack(gameBoardTile) {
+    let possibleTiles = new Set();
+    let pieceColor = gameBoardTile.piece.type[0]
+    const pos = gameBoardTile.tile.split("_").map(val => +val)
+
+    crawlSingle(possibleTiles, pos, [-1, -1], pieceColor, true, false)
+    crawlSingle(possibleTiles, pos, [1, 1], pieceColor, true, false)
+    crawlSingle(possibleTiles, pos, [-1, 1], pieceColor, true, false)
+    crawlSingle(possibleTiles, pos, [1, -1], pieceColor, true, false)
+
+    return possibleTiles
+}
+
+
 const typeMoves = {
-    "cross": (gameBoardTile) => {
-        const pos = gameBoardTile.tile.split("_").map(val => +val)
+    "cross": (startTile) => {
+        const pos = startTile.tile.split("_").map(val => +val)
 
         let possibleTiles = new Set();
 
-        let pieceColor = gameBoardTile.piece.type[0]
+        let pieceColor = startTile.piece.type[0]
 
         crawlStraight(possibleTiles, pos, [0, 1], pieceColor, true)
         crawlStraight(possibleTiles, pos, [0, -1], pieceColor, true)
@@ -588,13 +671,13 @@ const typeMoves = {
 
         return possibleTiles
     },
-    "diagonal": (gameBoardTile) => {
+    "diagonal": (startTile) => {
 
-        const pos = gameBoardTile.tile.split("_").map(val => +val)
+        const pos = startTile.tile.split("_").map(val => +val)
 
         let possibleTiles = new Set();
 
-        let pieceColor = gameBoardTile.piece.type[0]
+        let pieceColor = startTile.piece.type[0]
 
         crawlStraight(possibleTiles, pos, [-1, -1], pieceColor, true)
         crawlStraight(possibleTiles, pos, [-1, 1], pieceColor, true)
@@ -603,12 +686,12 @@ const typeMoves = {
 
         return possibleTiles
     },
-    "knight": (gameBoardTile) => {
+    "knight": (startTile) => {
         let possibleTiles = new Set();
 
-        let pieceColor = gameBoardTile.piece.type[0]
+        let pieceColor = startTile.piece.type[0]
 
-        const pos = gameBoardTile.tile.split("_").map(val => +val)
+        const pos = startTile.tile.split("_").map(val => +val)
         crawlKnight(possibleTiles, pos, [1, 0], pieceColor, true)
         crawlKnight(possibleTiles, pos, [-1, 0], pieceColor, true)
         crawlKnight(possibleTiles, pos, [0, 1], pieceColor, true)
@@ -617,17 +700,33 @@ const typeMoves = {
 
         return possibleTiles
     },
-    "single": (gameBoardTile) => {
-        return singleMove(gameBoardTile, false);
+    "single": (startTile) => {
+        return singleMove(startTile, false);
     },
-    "singleAttack": (gameBoardTile) => {
-        return singleMove(gameBoardTile, true);
+    "singleAttack": (startTile) => {
+        return singleMove(startTile, true);
     },
-    "diagonalAttack": (gameBoardTile) => {
+    "diagonalAttack": (startTile) => {
+        return diagonalSingleAttack(startTile)
+    },
+    "doubleStart": (startTile) => {
+        let possibleTiles = new Set();
 
-    },
-    "doubleMove": () => {
+        if (0 < startTile.piece.moves)
+            return possibleTiles
 
+
+        let pieceColor = startTile.piece.type[0]
+        const pos = startTile.tile.split("_").map(val => +val)
+
+
+        crawlStraight(possibleTiles, pos, [0, 1], pieceColor, true, 3)
+        crawlStraight(possibleTiles, pos, [0, -1], pieceColor, true, 3)
+        crawlStraight(possibleTiles, pos, [1, 0], pieceColor, true, 3)
+        crawlStraight(possibleTiles, pos, [-1, 0], pieceColor, true, 3)
+
+
+        return possibleTiles
     }
 
 }
@@ -645,8 +744,8 @@ const pieceMoveInstructions = {
     ],
     "p": [
         typeMoves.single,
-        typeMoves.double
-
+        typeMoves.diagonalAttack,
+        typeMoves.doubleStart
     ],
     "q": [
         typeMoves.cross,
@@ -673,7 +772,6 @@ export function showPossibleMoves(tile) {
         const possibleMoves = move(gameBoardTile)
         allPossibleMoves = new Set([...allPossibleMoves, ...possibleMoves])
     })
-
 
     allPossibleMoves.forEach(value => {
         displayHighlight(value.tile)

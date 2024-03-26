@@ -24,10 +24,6 @@ console.log(gameBoard)
 
 setupPieces()
 
-movePiece("1_1_2","2_5_4")
-
-
-
 let selectedPiece
 let hasHighlighted = false
 let possibleMoves = new Set();
@@ -58,7 +54,6 @@ document.onmousedown = (event) => {
             selectedPiece = {}
             hasHighlighted = false
             possibleMoves = new Set();
-
         } else {
 
             movePiece(selectedPiece.tile, destination)
