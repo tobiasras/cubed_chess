@@ -9,6 +9,8 @@ import {animateLoop, scene, retrieveTileOnClick} from "./threeSettings.js";
 
 const startBtn = document.getElementById("start-btn")
 const playerView = document.getElementById("player-view")
+const whitePiecesHeader = document.getElementById("white-pieces")
+const blackPiecesHeader = document.getElementById("black-pieces")
 
 
 playerView.style.display = "none"
@@ -16,23 +18,55 @@ startBtn.addEventListener("click", () => {
     startBtn.style.display = "none"
     playerView.style.display = "flex"
 
+    whitePiecesHeader.style.fontWeight = 'bold';
+    whitePiecesHeader.style.textDecoration = 'underline';
+    blackPiecesHeader.style.color = '#ffffff';
+    whitePiecesHeader.style.color = '#61ff61';
+    blackPiecesHeader.style.textDecoration = ''; // Reset style for blackPiecesHeader
+    blackPiecesHeader.style.fontWeight = '';
 
+    removeAllHighlights([...possibleMoves])
+    startGame()
 })
 
-export const gameBoard = createBoard(scene)
-console.log(gameBoard)
 
-setupPieces()
 
+
+export let gameBoard = {}
+
+
+
+
+let currentPlayerTurn;
 let selectedPiece
 let hasHighlighted = false
 let possibleMoves = new Set();
+let gameHasStarted = false
+
+function startGame() {
+    while(scene.children.length > 0){
+        scene.remove(scene.children[0]);
+    }
+    gameBoard = createBoard(scene)
+    setupPieces()
+    currentPlayerTurn = 'w'
+    gameHasStarted = true
+}
+
+gameBoard = createBoard(scene)
+setupPieces()
+
+
 
 document.onmousedown = (event) => {
     if (event.button !== 0)
         return
 
     const tileModel = retrieveTileOnClick(event)
+
+    if (!tileModel)
+        return;
+
     const tileString = tileModel.object.name
 
     document.getElementById("lastTile").innerText = tileString
@@ -55,6 +89,9 @@ document.onmousedown = (event) => {
             hasHighlighted = false
             possibleMoves = new Set();
         } else {
+            if (gameHasStarted && selectedPiece.piece.type[0] !== currentPlayerTurn) {
+                return;
+            }
 
             movePiece(selectedPiece.tile, destination)
             removeAllHighlights([...possibleMoves])
@@ -63,6 +100,24 @@ document.onmousedown = (event) => {
             hasHighlighted = false
             possibleMoves = new Set();
 
+
+            if (currentPlayerTurn === 'w') {
+                currentPlayerTurn = 'b';
+                blackPiecesHeader.style.textDecoration = 'underline';
+                blackPiecesHeader.style.fontWeight = 'bold';
+                whitePiecesHeader.style.color = '#ffffff';
+                blackPiecesHeader.style.color = '#61ff61';
+                whitePiecesHeader.style.textDecoration = ''; // Reset style for whitePiecesHeader
+                whitePiecesHeader.style.fontWeight = ''; // Reset style for whitePiecesHeader
+            } else {
+                currentPlayerTurn = 'w';
+                whitePiecesHeader.style.textDecoration = 'underline';
+                whitePiecesHeader.style.fontWeight = 'bold';
+                blackPiecesHeader.style.color = '#ffffff';
+                whitePiecesHeader.style.color = '#61ff61';
+                blackPiecesHeader.style.textDecoration = ''; // Reset style for blackPiecesHeader
+                blackPiecesHeader.style.fontWeight = '';
+            }
             return;
         }
     }
@@ -76,7 +131,9 @@ document.onmousedown = (event) => {
     if (!possibleMoves)
         return;
 
+
     selectedPiece = tileGameObject
+
     hasHighlighted = true
 
 

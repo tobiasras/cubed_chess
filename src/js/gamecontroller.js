@@ -65,77 +65,104 @@ export function movePiece(fromTile, toTile) {
 }
 
 export function setupPieces() {
-    createPiece('1_1_5', "wK", true)
-    createPiece('1_1_7', "wN", true)
-    createPiece('1_1_4', "wQ", true)
-    createPiece('1_1_2', "wN", true)
-    createPiece('1_1_1', "wR", true)
-    createPiece('1_1_8', "wR", true)
-    createPiece('1_1_3', "wB", true)
-    createPiece('1_1_6', "wB", true)
 
-    createPiece('1_2_5', "wP", true)
-    createPiece('1_2_7', "wP", true)
-    createPiece('1_2_4', "wP", true)
-    createPiece('1_2_2', "wP", true)
-    createPiece('1_2_1', "wP", true)
-    createPiece('1_2_8', "wP", true)
-    createPiece('1_2_3', "wP", true)
-    createPiece('1_2_6', "wP", true)
 
-    createPiece('1_8_5', "bK", false)
-    createPiece('1_8_7', "bN", false)
-    createPiece('1_8_4', "bQ", false)
-    createPiece('1_8_2', "bN", false)
-    createPiece('1_8_1', "bR", false)
-    createPiece('1_8_8', "bR", false)
-    createPiece('1_8_3', "bB", false)
-    createPiece('1_8_6', "bB", false)
 
-    createPiece('1_7_5', "bP", false)
-    createPiece('1_7_7', "bP", false)
-    createPiece('1_7_4', "bP", false)
-    createPiece('1_7_2', "bP", false)
-    createPiece('1_7_1', "bP", false)
-    createPiece('1_7_8', "bP", false)
-    createPiece('1_7_3', "bP", false)
-    createPiece('1_7_6', "bP", false)
+    createPiece('1_3_5', "wP", false)
+    createPiece('1_3_7', "wP", false)
+    createPiece('1_3_4', "wP", false)
+    createPiece('1_3_2', "wP", false)
+    createPiece('1_3_1', "wP", false)
+    createPiece('1_3_8', "wP", false)
+    createPiece('1_3_3', "wP", false)
+    createPiece('1_3_6', "wP", false)
 
-    createPiece('6_1_5', "wK", true)
-    createPiece('6_1_7', "wN", true)
-    createPiece('6_1_4', "wQ", true)
-    createPiece('6_1_2', "wN", true)
-    createPiece('6_1_1', "wR", true)
-    createPiece('6_1_8', "wR", true)
-    createPiece('6_1_3', "wB", true)
-    createPiece('6_1_6', "wB", true)
+    createPiece('1_4_5', "wK", false)
+    createPiece('1_4_7', "wN", false)
+    createPiece('1_4_2', "wN", false)
+    createPiece('1_4_1', "wR", false)
+    createPiece('1_4_8', "wR", false)
+    createPiece('1_4_3', "wB", false)
+    createPiece('1_4_6', "wB", false)
 
-    createPiece('6_2_5', "wP", true)
-    createPiece('6_2_7', "wP", true)
-    createPiece('6_2_4', "wP", true)
-    createPiece('6_2_2', "wP", true)
-    createPiece('6_2_1', "wP", true)
-    createPiece('6_2_8', "wP", true)
-    createPiece('6_2_3', "wP", true)
-    createPiece('6_2_6', "wP", true)
+    createPiece('1_5_7', "wN", false)
+    createPiece('1_5_4', "wQ", false)
+    createPiece('1_5_2', "wN", false)
+    createPiece('1_5_1', "wR", false)
+    createPiece('1_5_8', "wR", false)
+    createPiece('1_5_3', "wB", false)
+    createPiece('1_5_6', "wB", false)
 
-    createPiece('6_8_5', "bK", false)
-    createPiece('6_8_7', "bN", false)
-    createPiece('6_8_4', "bQ", false)
-    createPiece('6_8_2', "bN", false)
-    createPiece('6_8_1', "bR", false)
-    createPiece('6_8_8', "bR", false)
-    createPiece('6_8_3', "bB", false)
-    createPiece('6_8_6', "bB", false)
+    createPiece('1_6_5', "wP", false)
+    createPiece('1_6_7', "wP", false)
+    createPiece('1_6_4', "wP", false)
+    createPiece('1_6_2', "wP", false)
+    createPiece('1_6_1', "wP", false)
+    createPiece('1_6_8', "wP", false)
+    createPiece('1_6_3', "wP", false)
+    createPiece('1_6_6', "wP", false)
 
-    createPiece('6_7_5', "bP", false)
-    createPiece('6_7_7', "bP", false)
-    createPiece('6_7_4', "bP", false)
-    createPiece('6_7_2', "bP", false)
-    createPiece('6_7_1', "bP", false)
-    createPiece('6_7_8', "bP", false)
-    createPiece('6_7_3', "bP", false)
-    createPiece('6_7_6', "bP", false)
+
+    createPiece('3_3_8', "wP", false)
+    createPiece('3_4_8', "wP", false)
+    createPiece('3_5_8', "wP", false)
+    createPiece('3_6_8', "wP", false)
+
+    createPiece('4_3_8', "wP", false)
+    createPiece('4_4_8', "wP", false)
+    createPiece('4_5_8', "wP", false)
+    createPiece('4_6_8', "wP", false)
+
+
+    createPiece('3_3_1', "bP", false)
+    createPiece('3_4_1', "bP", false)
+    createPiece('3_5_1', "bP", false)
+    createPiece('3_6_1', "bP", false)
+
+    createPiece('4_3_1', "bP", false)
+    createPiece('4_4_1', "bP", false)
+    createPiece('4_5_1', "bP", false)
+    createPiece('4_6_1', "bP", false)
+
+    createPiece('6_6_5', "bP", false)
+    createPiece('6_6_7', "bP", false)
+    createPiece('6_6_4', "bP", false)
+    createPiece('6_6_2', "bP", false)
+    createPiece('6_6_1', "bP", false)
+    createPiece('6_6_8', "bP", false)
+    createPiece('6_6_3', "bP", false)
+    createPiece('6_6_6', "bP", false)
+
+
+    createPiece('6_4_5', "bK", false)
+    createPiece('6_4_7', "bN", false)
+    createPiece('6_4_2', "bN", false)
+    createPiece('6_4_1', "bR", false)
+    createPiece('6_4_8', "bR", false)
+    createPiece('6_4_3', "bB", false)
+    createPiece('6_4_6', "bB", false)
+
+    createPiece('6_5_7', "bN", false)
+    createPiece('6_5_4', "bQ", false)
+    createPiece('6_5_2', "bN", false)
+    createPiece('6_5_1', "bR", false)
+    createPiece('6_5_8', "bR", false)
+    createPiece('6_5_3', "bB", false)
+    createPiece('6_5_6', "bB", false)
+
+    createPiece('6_3_5', "bP", false)
+    createPiece('6_3_7', "bP", false)
+    createPiece('6_3_4', "bP", false)
+    createPiece('6_3_2', "bP", false)
+    createPiece('6_3_1', "bP", false)
+    createPiece('6_3_8', "bP", false)
+    createPiece('6_3_3', "bP", false)
+    createPiece('6_3_6', "bP", false)
+
+
+
+
+
 
 }
 
@@ -505,7 +532,6 @@ function transformDirection(direction, nextPos, pos) {
 }
 
 function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack, depth = 999) {
-    depth = depth - 1;
     if (depth === 0)
         return;
 
@@ -543,6 +569,7 @@ function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack, dep
     // no piece on tile
     if (nextGameTile.isBoardTile) {
         possibleTiles.add(nextGameTile)
+        depth = depth - 1;
         crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack, depth)
         return
     }
@@ -551,6 +578,7 @@ function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack, dep
     // makes it possible to travel to diff. sides
     transformDirection(direction, nextPos, pos);
 
+    depth = depth - 1;
     crawlStraight(possibleTiles, nextPos, direction, pieceColor, canAttack, depth)
 }
 
@@ -697,7 +725,6 @@ const typeMoves = {
         crawlKnight(possibleTiles, pos, [0, 1], pieceColor, true)
         crawlKnight(possibleTiles, pos, [0, -1], pieceColor, true)
 
-
         return possibleTiles
     },
     "single": (startTile) => {
@@ -715,16 +742,13 @@ const typeMoves = {
         if (0 < startTile.piece.moves)
             return possibleTiles
 
-
         let pieceColor = startTile.piece.type[0]
         const pos = startTile.tile.split("_").map(val => +val)
 
-
-        crawlStraight(possibleTiles, pos, [0, 1], pieceColor, true, 3)
-        crawlStraight(possibleTiles, pos, [0, -1], pieceColor, true, 3)
-        crawlStraight(possibleTiles, pos, [1, 0], pieceColor, true, 3)
-        crawlStraight(possibleTiles, pos, [-1, 0], pieceColor, true, 3)
-
+        crawlStraight(possibleTiles, pos, [0, 1], pieceColor, true, 2)
+        crawlStraight(possibleTiles, pos, [0, -1], pieceColor, true, 2)
+        crawlStraight(possibleTiles, pos, [1, 0], pieceColor, true, 2)
+        crawlStraight(possibleTiles, pos, [-1, 0], pieceColor, true, 2)
 
         return possibleTiles
     }
@@ -733,7 +757,6 @@ const typeMoves = {
 
 const pieceMoveInstructions = {
     "b": [
-        //typeMoves.cross,
         typeMoves.diagonal
     ],
     "k": [
