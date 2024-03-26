@@ -77,283 +77,364 @@ export function getGameBoardTileFromTile(tile) {
     return gameBoard[+pos[0] - 1][+pos[1]][+pos[2]]
 }
 
-function transformDirection(direction, nextPos, pos) {
-
-
-    if (pos[0] === 1 && nextPos[0] === 2) {
-        if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = -1
-
-        } else if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
+function transformDirectionDiagonal(pos, nextPos, direction) {
+    if (pos[0] === 1) {
+        if (nextPos[0] === 2) {
+            if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
+        }
+        if (nextPos[0] === 3) {
+            if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = -1
+            } else if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = -1
+            }
+        }
+        if (nextPos[0] === 4) {
+            if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
+        }
+        if (nextPos[0] === 5) {
+            if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
         }
     }
 
-    if (pos[0] === 1 && nextPos[0] === 3) {
-        if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = -1
-        } else if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = -1
+    else if (pos[0] === 2) {
+        if (nextPos[0] === 1) {
+            if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
+        }
+
+        if (nextPos[0] === 3) {
+            if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = 1
+            } else if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
+        }
+
+        if (nextPos[0] === 4) {
+            if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
+        }
+
+        if (nextPos[0] === 6) {
+            if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
+        }
+
+
+    }
+
+    else if (pos[0] === 3) {
+        if (nextPos[0] === 1) {
+            if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = -1
+            } else if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = -1
+            }
+        }
+
+        if (nextPos[0] === 2) {
+            if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = 1
+            } else if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
+        }
+
+        if (nextPos[0] === 5) {
+            if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
+        }
+
+        if (nextPos[0] === 5) {
+            if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = -1
+            }
         }
     }
 
-    if (pos[0] === 1 && nextPos[0] === 4) {
-        if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = -1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
+    else if (pos[0] === 4) {
+        if (nextPos[0] === 1) {
+            if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = -1
+                direction[1] = 1
+            }
+        }
+
+        if (nextPos[0] === 2) {
+            if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            } else if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = -1
+            }
+        }
+
+        if (nextPos[0] === 5) {
+            if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            }
+        }
+
+        if (nextPos[0] === 6) {
+            if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = 1
+            }
         }
     }
 
-    if (pos[0] === 1 && nextPos[0] === 5) {
-        if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = -1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
+    else if (pos[0] === 5) {
+        if (nextPos[0] === 1) {
+            if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            }
+        }
+
+        if (nextPos[0] === 3) {
+            if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            }
+        }
+
+        if (nextPos[0] === 4) {
+            if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            }
+        }
+
+        if (nextPos[0] === 6) {
+            if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = -1
+            } else if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = 1
+            }
         }
     }
 
-    // Side 2
-    if (pos[0] === 2 && nextPos[0] === 1) {
-        if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = -1
+    else if (pos[0] === 6) {
+        if (nextPos[0] === 2) {
+            if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            } else if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = 1
+            }
         }
-    }
 
-    if (pos[0] === 2 && nextPos[0] === 3) {
-        if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = 1
-        } else if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
+        if (nextPos[0] === 3) {
+            if (direction[0] === 1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = 1
+            }
         }
-    }
 
-    if (pos[0] === 2 && nextPos[0] === 4) {
-        if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
+        if (nextPos[0] === 4) {
+            if (direction[0] === 1 && direction[1] === -1) {
+                direction[0] = 1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = 1
+            }
         }
-    }
-
-    if (pos[0] === 2 && nextPos[0] === 6) {
-        if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
-        }
-    }
-
-
-    if (pos[0] === 3 && nextPos[0] === 1) {
-        if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = -1
-        } else if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = -1
-        }
-    }
-
-    if (pos[0] === 3 && nextPos[0] === 2) {
-        if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = 1
-        } else if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
-        }
-    }
-
-    if (pos[0] === 3 && nextPos[0] === 5) {
-        if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
-        }
-    }
-
-    if (pos[0] === 3 && nextPos[0] === 5) {
-        if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = -1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = -1
-        }
-    }
-
-    if (pos[0] === 4 && nextPos[0] === 1) {
-        if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = -1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 4 && nextPos[0] === 2) {
-        if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        } else if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = -1
-        }
-    }
-
-    if (pos[0] === 4 && nextPos[0] === 5) {
-        if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = -1
-        } else if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 4 && nextPos[0] === 6) {
-        if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 5 && nextPos[0] === 1) {
-        if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = -1
-        } else if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 5 && nextPos[0] === 3) {
-        if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = -1
-        } else if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 5 && nextPos[0] === 4) {
-        if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = -1
-        } else if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 5 && nextPos[0] === 6) {
-        if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = -1
-        } else if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 6 && nextPos[0] === 2) {
-        if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        } else if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 6 && nextPos[0] === 3) {
-        if (direction[0] === 1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 6 && nextPos[0] === 4) {
-        if (direction[0] === 1 && direction[1] === -1) {
-            direction[0] = 1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = 1
-        }
-    }
-
-    if (pos[0] === 6 && nextPos[0] === 5) {
-        if (direction[0] === -1 && direction[1] === 1) {
-            direction[0] = 1
-            direction[1] = 1
-        } else if (direction[0] === -1 && direction[1] === -1) {
-            direction[0] = -1
-            direction[1] = 1
+        if (nextPos[0] === 5) {
+            if (direction[0] === -1 && direction[1] === 1) {
+                direction[0] = 1
+                direction[1] = 1
+            } else if (direction[0] === -1 && direction[1] === -1) {
+                direction[0] = -1
+                direction[1] = 1
+            }
         }
     }
 
 
+
+}
+
+function transformDirectionStraight(direction, pos, nextPos) {
     if (direction[0] === 0 || direction[1] === 0) {
-        if (nextPos[1] === 8 && direction[0] !== 0) {
-            console.log("a")
-            direction[0] = -1
+        if (pos[0] === 1) {
+            if (nextPos[0] === 2) {
+                direction[0] = 0
+                direction[1] = -1
+            } else if (nextPos[0] === 3) {
+                direction[0] = 0
+                direction[1] = -1
+            } else if (nextPos[0] === 4) {
+                direction[0] = 0
+                direction[1] = -1
+            } else if (nextPos[0] === 5) {
+                direction[0] = 0
+                direction[1] = -1
+            }
+        } else if (pos[0] === 2) {
+            if (nextPos[0] === 1) {
+                direction[0] = -1
+                direction[1] = 0
+            } else if (nextPos[0] === 3) {
+                direction[0] = -1
+                direction[1] = 0
+            } else if (nextPos[0] === 4) {
+                direction[0] = -1
+                direction[1] = 0
+            } else if (nextPos[0] === 6) {
+                direction[0] = -1
+                direction[1] = 0
+            }
+        } else if (pos[0] === 3) {
+            if (nextPos[0] === 1) {
+                direction[0] = 0
+                direction[1] = -1
+
+            } else if (nextPos[0] === 2) {
+                direction[0] = -1
+                direction[1] = 0
+
+            } else if (nextPos[0] === 5) {
+                direction[0] = -1
+                direction[1] = 0
+
+            } else if (nextPos[0] === 6) {
+                direction[0] = 0
+                direction[1] = -1
+            }
+        } else if (pos[0] === 4) {
+            if (nextPos[0] === 1) {
+                direction[0] = 0
+                direction[1] = 1
+
+            } else if (nextPos[0] === 2) {
+                direction[0] = 1
+                direction[1] = 0
+
+            } else if (nextPos[0] === 5) {
+                direction[0] = 1
+                direction[1] = 0
+
+            } else if (nextPos[0] === 6) {
+                direction[0] = 0
+                direction[1] = 1
+            }
         }
-        if (nextPos[1] === 8 && direction[1] !== 0) {
-            console.log("b")
-            direction[1] = -1
+
+        if (pos[0] === 5) {
+            if (nextPos[0] === 1) {
+                direction[0] = 1
+                direction[1] = 0
+            } else if (nextPos[0] === 3) {
+                direction[0] = 1
+                direction[1] = 0
+            } else if (nextPos[0] === 4) {
+                direction[0] = 1
+                direction[1] = 0
+            } else if (nextPos[0] === 6) {
+                direction[0] = 1
+                direction[1] = 0
+            }
         }
-        if (nextPos[1] === 1 && direction[0] !== 0) {
-            console.log("c")
-            direction[0] = 1
-        }
-        if (nextPos[1] === 1 && direction[1] !== 0) {
-            console.log("d")
-            direction[1] = 1
-        }
-        if (nextPos[2] === 1 && direction[0] !== 0) {
-            console.log("f")
-            direction[0] = 1
-        }
-        if (nextPos[2] === 8 && direction[1] !== 0) {
-            console.log("g")
-            direction[1] = -1
-        }
-        if (nextPos[2] === 1 && direction[1] !== 0) {
-            console.log("h")
-            direction[1] = 1
+
+        if (pos[0] === 6) {
+            if (nextPos[0] === 2) {
+                direction[0] = 0
+                direction[1] = 1
+            } else if (nextPos[0] === 3) {
+                direction[0] = 0
+                direction[1] = 1
+            } else if (nextPos[0] === 4) {
+                direction[0] = 0
+                direction[1] = 1
+            } else if (nextPos[0] === 5) {
+                direction[0] = 0
+                direction[1] = 1
+            }
         }
     }
+}
+
+function transformDirection(direction, nextPos, pos) {
+    transformDirectionDiagonal(pos, nextPos, direction);
+    transformDirectionStraight(direction, pos, nextPos);
 }
 
 function crawlStraight(possibleTiles, pos, direction, pieceColor, canAttack) {
