@@ -3,7 +3,6 @@ import * as THREE from "three";
 const segmentSize = 3 / 8; // Assuming the chessboard size is 3 and it has 8 segments per side
 
 export function createBoard(scene) {
-
     const gameBoard = []
 
     for (let side = 0; side < 6; side++) {
@@ -262,7 +261,7 @@ let rowFlaps = [
             for (let i = 0; i < 8; i++) {
                 tiles.push({
                     isBoardTile: false,
-                    tile: `5_1_${i + 1}`,
+                    tile:`5_${i + 1}_1` //`5_1_${i + 1}`,
                 })
             }
             tiles.push(0)
