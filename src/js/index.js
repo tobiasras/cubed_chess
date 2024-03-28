@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {createBoard} from "./chessboard.js";
 import {
+    checkCheckmate,
     getGameBoardTileFromTile, movePiece, removeAllHighlights,
     setupPieces, showPossibleMoves,
 } from "./gamecontroller.js";
@@ -11,7 +12,6 @@ const startBtn = document.getElementById("start-btn")
 const playerView = document.getElementById("player-view")
 const whitePiecesHeader = document.getElementById("white-pieces")
 const blackPiecesHeader = document.getElementById("black-pieces")
-
 
 playerView.style.display = "none"
 startBtn.addEventListener("click", () => {
@@ -36,6 +36,8 @@ export let gameBoard = {}
 
 
 
+let whiteKing
+let blackKing
 
 let currentPlayerTurn;
 let selectedPiece
@@ -48,15 +50,15 @@ function startGame() {
         scene.remove(scene.children[0]);
     }
     gameBoard = createBoard(scene)
-    setupPieces()
+    let kings = setupPieces()
     currentPlayerTurn = 'w'
     gameHasStarted = true
+
+    whiteKing = kings.whiteKing
+    blackKing = kings.blackKing
 }
 
 gameBoard = createBoard(scene)
-setupPieces()
-
-
 
 document.onmousedown = (event) => {
     if (event.button !== 0)
@@ -75,6 +77,7 @@ document.onmousedown = (event) => {
         let pieceToMove = false
         let destination
 
+
         possibleMoves.forEach((highlightedTiles) => {
             if (highlightedTiles.tile === tileString) {
                 destination = highlightedTiles.tile
@@ -84,7 +87,6 @@ document.onmousedown = (event) => {
 
         if (!pieceToMove) {
             removeAllHighlights([...possibleMoves])
-
             selectedPiece = {}
             hasHighlighted = false
             possibleMoves = new Set();
@@ -96,10 +98,26 @@ document.onmousedown = (event) => {
             movePiece(selectedPiece.tile, destination)
             removeAllHighlights([...possibleMoves])
 
+            console.log(selectedPiece)
+
+            if (gameHasStarted) {
+                let kingTile = (currentPlayerTurn === 'w') ? whiteKing : blackKing
+                let isInCheck = checkCheckmate(currentPlayerTurn === 'w' ? 'b' : 'w', {
+                    tile: kingTile,
+                    piece: {
+                        type : currentPlayerTurn
+                    }
+                })
+
+
+                console.log("is in check", isInCheck)
+            }
+
+
+
             selectedPiece = {}
             hasHighlighted = false
             possibleMoves = new Set();
-
 
             if (currentPlayerTurn === 'w') {
                 currentPlayerTurn = 'b';
@@ -124,16 +142,13 @@ document.onmousedown = (event) => {
 
 
 
-
     const tileGameObject = getGameBoardTileFromTile(tileModel.object.name)
     possibleMoves = showPossibleMoves(tileGameObject.tile)
 
     if (!possibleMoves)
         return;
 
-
     selectedPiece = tileGameObject
-
     hasHighlighted = true
 
 

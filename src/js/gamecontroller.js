@@ -65,9 +65,6 @@ export function movePiece(fromTile, toTile) {
 }
 
 export function setupPieces() {
-
-
-
     createPiece('1_3_5', "wP", false)
     createPiece('1_3_7', "wP", false)
     createPiece('1_3_4', "wP", false)
@@ -102,7 +99,6 @@ export function setupPieces() {
     createPiece('1_6_3', "wP", false)
     createPiece('1_6_6', "wP", false)
 
-
     createPiece('3_3_8', "wP", false)
     createPiece('3_4_8', "wP", false)
     createPiece('3_5_8', "wP", false)
@@ -112,7 +108,6 @@ export function setupPieces() {
     createPiece('4_4_8', "wP", false)
     createPiece('4_5_8', "wP", false)
     createPiece('4_6_8', "wP", false)
-
 
     createPiece('3_3_1', "bP", false)
     createPiece('3_4_1', "bP", false)
@@ -159,11 +154,10 @@ export function setupPieces() {
     createPiece('6_3_3', "bP", false)
     createPiece('6_3_6', "bP", false)
 
-
-
-
-
-
+    return {
+        blackKing: '6_4_5',
+        whiteKing: '1_4_5'
+    }
 }
 
 export function getGameBoardTileFromTile(tile) {
@@ -209,9 +203,7 @@ function transformDirectionDiagonal(pos, nextPos, direction) {
                 direction[1] = -1
             }
         }
-    }
-
-    else if (pos[0] === 2) {
+    } else if (pos[0] === 2) {
         if (nextPos[0] === 1) {
             if (direction[0] === 1 && direction[1] === 1) {
                 direction[0] = -1
@@ -253,9 +245,7 @@ function transformDirectionDiagonal(pos, nextPos, direction) {
         }
 
 
-    }
-
-    else if (pos[0] === 3) {
+    } else if (pos[0] === 3) {
         if (nextPos[0] === 1) {
             if (direction[0] === -1 && direction[1] === 1) {
                 direction[0] = -1
@@ -295,9 +285,7 @@ function transformDirectionDiagonal(pos, nextPos, direction) {
                 direction[1] = -1
             }
         }
-    }
-
-    else if (pos[0] === 4) {
+    } else if (pos[0] === 4) {
         if (nextPos[0] === 1) {
             if (direction[0] === 1 && direction[1] === 1) {
                 direction[0] = 1
@@ -337,9 +325,7 @@ function transformDirectionDiagonal(pos, nextPos, direction) {
                 direction[1] = 1
             }
         }
-    }
-
-    else if (pos[0] === 5) {
+    } else if (pos[0] === 5) {
         if (nextPos[0] === 1) {
             if (direction[0] === -1 && direction[1] === 1) {
                 direction[0] = 1
@@ -379,9 +365,7 @@ function transformDirectionDiagonal(pos, nextPos, direction) {
                 direction[1] = 1
             }
         }
-    }
-
-    else if (pos[0] === 6) {
+    } else if (pos[0] === 6) {
         if (nextPos[0] === 2) {
             if (direction[0] === 1 && direction[1] === 1) {
                 direction[0] = 1
@@ -421,7 +405,6 @@ function transformDirectionDiagonal(pos, nextPos, direction) {
             }
         }
     }
-
 
 
 }
@@ -683,7 +666,6 @@ function diagonalSingleAttack(gameBoardTile) {
     return possibleTiles
 }
 
-
 const typeMoves = {
     "cross": (startTile) => {
         const pos = startTile.tile.split("_").map(val => +val)
@@ -779,7 +761,6 @@ const pieceMoveInstructions = {
     ]
 }
 
-
 export function showPossibleMoves(tile) {
     const gameBoardTile = getGameBoardTileFromTile(tile)
 
@@ -827,7 +808,6 @@ function removeHighlight(tile) {
     }
 }
 
-
 function displayHighlight(tile) {
     const model = scene.getObjectByName(`$:${tile}`)
     const gameBoardTile = getGameBoardTileFromTile(tile);
@@ -861,4 +841,42 @@ function displayHighlight(tile) {
             isColor: true
         }
     }
+}
+
+export function checkCheckmate(pieceColor, gameBoardKingTile) {
+    console.log("is checking checkmate for , ", pieceColor , " king is on ," , gameBoardKingTile)
+
+    console.log(gameBoardKingTile)
+
+    let isInCheck = false
+
+    typeMoves.cross(gameBoardKingTile).forEach(tile => {
+        if (tile.hasPiece) {
+            let piTy = tile.piece.type[1]
+            if (piTy === 'Q' || piTy === 'R') {
+                isInCheck = true
+            }
+        }
+
+    });
+
+    typeMoves.diagonal(gameBoardKingTile).forEach(tile => {
+        if (tile.hasPiece) {
+            let piTy = tile.piece.type[1]
+            if (piTy === 'Q' || piTy === 'B') {
+                isInCheck = true
+            }
+        }
+    })
+
+    typeMoves.knight(gameBoardKingTile).forEach(tile => {
+        if (tile.hasPiece) {
+            let piTy = tile.piece.type[1]
+            if (piTy === 'N') {
+                isInCheck = true
+            }
+        }
+    })
+
+    return isInCheck
 }
