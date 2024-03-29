@@ -1,12 +1,12 @@
-import * as THREE from 'three';
-import {createBoard} from "./chessboard.js";
+import {createBoard} from "/cubed_chess/js/chessboard.js";
+import {animateLoop, scene, retrieveTileOnClick} from "/cubed_chess/js/threeSettings.js";
+
 import {
     checkCheckmate,
     getGameBoardTileFromTile, movePiece, removeAllHighlights,
     setupPieces, showPossibleMoves,
-} from "./gamecontroller.js";
+} from "/cubed_chess/js/gamecontroller.js";
 
-import {animateLoop, scene, retrieveTileOnClick} from "./threeSettings.js";
 
 const startBtn = document.getElementById("start-btn")
 const playerView = document.getElementById("player-view")

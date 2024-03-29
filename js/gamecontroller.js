@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {gameBoard} from "./index.js";
-import {scene} from "./threeSettings.js";
+import {gameBoard} from "/cubed_chess/js/index.js";
+import {scene} from "/cubed_chess/js/threeSettings.js";
 
 const textureLoader = new THREE.TextureLoader();
 
